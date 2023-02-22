@@ -10,14 +10,14 @@ describe("create org", () =>{
     }
 
     before("log into the app", () =>{
-        cy.visit("/");
-        cy.url().should("include", "/login");
-        loginPage.login(Cypress.env("userEmail"), Cypress.env("userPassword"));
+        cy.loginViaBackend();
     })
 
     it("create org", () =>{
         createOrg.createOrgDiv.should("be.visible")
         .and("have.css", "background-color", 'rgb(230, 230, 230)');
         createOrg.createOrg(orgData.orgName);
+        createOrg.addNewBoardElement.should("exist")
+        .and("have.css", "background-color", 'rgb(230, 230, 230)' )
     })
 })

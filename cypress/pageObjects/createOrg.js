@@ -15,11 +15,20 @@ class CreateOrg{
         return cy.get(".vs-c-modal--create-organization").find("button").eq(2)
     }
 
+    get okButton(){
+        return cy.get(".vs-c-modal--features-button").find("button")
+    }
+
+    get addNewBoardElement(){
+        return cy.get(".vs-c-organization-boards__item--add-new")
+    }
+
     createOrg(orgName){
         this.createOrgDiv.click()
         this.orgNameInput.type(orgName);
         this.buttonNext.click();
         this.buttonCreate.click();
+        this.okButton.click();
     }
 }
 
