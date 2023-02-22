@@ -1,24 +1,27 @@
 /// <reference types="Cypress"/>
 
 import { createOrg } from "../pageObjects/createOrg";
-import { loginPage } from "../pageObjects/loginPOM";
+import { addB } from "../pageObjects/addBoard";
 import { faker } from "@faker-js/faker";
 
-describe("create org", () =>{
+
+describe("add board", () =>{
     let orgData = {
         orgName: faker.random.word()
+    }
+    let boardData = {
+        boardName: faker.random.word()
     }
 
     before("log into the app", () =>{
         cy.loginViaBackend();
-    })
-
-    it("create org", () =>{
-        createOrg.createOrgDiv.should("be.visible")
-        .and("have.css", "background-color", 'rgb(230, 230, 230)');
         createOrg.createOrg(orgData.orgName);
-        createOrg.addNewBoardElement.should("exist")
-        .and("have.css", "background-color", 'rgb(230, 230, 230)' )
     })
-})
 
+    it("add board", () =>{
+        addB.addNewBoard.should("be.visible")
+        .and("have.css", "background-color", 'rgb(230, 230, 230)');
+        addB.addBoard(boardData.boardName);
+    })
+
+})
