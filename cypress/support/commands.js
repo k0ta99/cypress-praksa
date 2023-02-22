@@ -24,17 +24,21 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add('loginApi', (mockObj) => {
+Cypress.Commands.add("loginViaBackend", () =>{
     cy.request({
-      method: 'POST',
-      url: Cypress.env('apiUrl') + '/login ',
-      body: mockObj
+      method: "POST",
+      url: "https://cypress-api.vivifyscrum-stage.com/api/v2/login",
+      body: {
+        email: Cypress.env("userEmail"),
+        password: Cypress.env("userPassword"),
+      },
     }).then((resp) => {
       expect(resp.status).to.equal(200);
-      expect(resp.body).to.have.property('token');
-      expect(resp.body).to.have.property('user');
-      window.localStorage.setItem('token', resp.body.token);
-      window.localStorage.setItem('user', JSON.stringify(resp.body.user));
-      window.localStorage.setItem('user_id', resp.body.user.id);
+      expect(resp.body).to.have.property("token");
+      expect(resp.body).to.have.property("user");
+      window.localStorage.setItem("token", resp.body.token);
+      window.localStorage.setItem("user", JSON.stringify(resp.body.user));
+      window.localStorage.setItem("user_id", resp.body.user.id);
     });
-  });
+    cy.visit("my-organizations");
+  })
