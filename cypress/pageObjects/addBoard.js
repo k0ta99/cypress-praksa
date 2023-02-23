@@ -1,4 +1,8 @@
 class AddBoard{
+
+    get boardsPop(){
+        return cy.get(".vs-c-modal__body").find("button").eq(0);
+    }
     get addNewBoard(){
         return cy.get(".vs-c-organization-boards__item--add-new");
     }
@@ -28,6 +32,7 @@ class AddBoard{
     }
 
     addBoard(boardTitle){
+        this.boardsPop.click();
         this.addNewBoard.click();
         this.boardTitleField.type(boardTitle);
         this.nextButton.click();

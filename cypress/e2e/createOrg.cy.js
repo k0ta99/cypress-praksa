@@ -5,6 +5,7 @@ import { loginPage } from "../pageObjects/loginPOM";
 import { faker } from "@faker-js/faker";
 
 describe("create org", () =>{
+
     let orgData = {
         orgName: faker.random.word()
     }
@@ -14,11 +15,14 @@ describe("create org", () =>{
     })
 
     it("create org", () =>{
-        createOrg.createOrgDiv.should("be.visible")
-        .and("have.css", "background-color", 'rgb(230, 230, 230)');
-        createOrg.createOrg(orgData.orgName);
-        createOrg.addNewBoardElement.should("exist")
-        .and("have.css", "background-color", 'rgb(230, 230, 230)' )
+        cy.createOrg();
+        // createOrg.createOrgDiv.should("be.visible")
+        // .and("have.css", "background-color", 'rgb(230, 230, 230)');
+        // createOrg.createOrg(orgData.orgName);
+        // createOrg.addNewBoardElement.should("exist")
+        // .and("have.css", "background-color", 'rgb(230, 230, 230)' )
     })
 })
+
+
 

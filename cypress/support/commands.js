@@ -42,3 +42,46 @@ Cypress.Commands.add("loginViaBackend", () =>{
     });
     cy.visit("my-organizations");
   })
+
+  Cypress.Commands.add("addUser", () =>{
+    cy.request({
+      method: "POST",
+      url: "https://cypress-api.vivifyscrum-stage.com/api/v2/boards/14302/users",
+      headers: {
+        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+      },
+      body: {
+        access: "admin",
+        email: "test15@test.com",
+        'g-recaptcha-response': '',
+      },
+    })
+  })
+
+  Cypress.Commands.add("createOrg", () =>{
+    cy.request({
+      method: "POST",
+      url: "https://cypress-api.vivifyscrum-stage.com/api/v2/organizations",
+      headers: {
+        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+      },
+      body: {
+        name: "org name"
+      },
+    })
+  })
+
+  Cypress.Commands.add("addBoard", () =>{
+    cy.request({
+      method: "POST",
+      url: "https://cypress-api.vivifyscrum-stage.com/api/v2/boards",
+      headers: {
+        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+      },
+      body: {
+        name: "board",
+        type: "scrum_board",
+        organization_id: "25960"
+      },
+    })
+  })
