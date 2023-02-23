@@ -3,9 +3,6 @@
 import { addUser } from "../pageObjects/addUser";
 
 describe("add user", () =>{
-    let userEmail = {
-        user: "remadija98@gmail.com"
-    }
 
     before("log into the app", () =>{
         cy.loginViaBackend();

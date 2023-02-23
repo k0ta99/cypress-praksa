@@ -40,24 +40,25 @@ Cypress.Commands.add("loginViaBackend", () =>{
       window.localStorage.setItem("user", JSON.stringify(resp.body.user));
       window.localStorage.setItem("user_id", resp.body.user.id);
     });
-    cy.visit("my-organizations");
   })
 
   Cypress.Commands.add("addUser", () =>{
     cy.request({
       method: "POST",
-      url: "https://cypress-api.vivifyscrum-stage.com/api/v2/boards/14302/users",
+      url: `https://cypress-api.vivifyscrum-stage.com/api/v2/boards/${boardId}/users`,
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
       },
       body: {
         access: "admin",
-        email: "test15@test.com",
+        email: "remadija98@gmail.com",
         'g-recaptcha-response': '',
       },
     })
   })
 
+  let organizationId;
+  let boardId;
   Cypress.Commands.add("createOrg", () =>{
     cy.request({
       method: "POST",
@@ -68,6 +69,8 @@ Cypress.Commands.add("loginViaBackend", () =>{
       body: {
         name: "org name"
       },
+    }).its("body").then(response => {
+      organizationId = response.id;
     })
   })
 
@@ -81,7 +84,32 @@ Cypress.Commands.add("loginViaBackend", () =>{
       body: {
         name: "board",
         type: "scrum_board",
-        organization_id: "25960"
+        organization_id: organizationId
+      },
+    }).its("body").then(response =>{
+      boardId = response.id;
+    })
+  })
+
+  Cypress.Commands.add("deleteOrg", () =>{
+    cy.request({
+      method: "POST",
+      url: `https://cypress-api.vivifyscrum-stage.com/api/v2/organizations/${organizationId}`,
+      headers: {
+        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+      },
+      body: {
+        passwordOrEmail: "test1234"
       },
     })
   })
+
+  
+
+  // function getEntityId(){
+  //   const url = window.location.href
+  //   let linkSplit = url.split("/")
+  //   let linkId = linkSplit[linkSplit.length - 2]
+
+  //   return linkId;
+  // }
