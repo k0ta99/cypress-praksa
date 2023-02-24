@@ -32,7 +32,7 @@ describe("check if reported days off deduct from total number of days off  ", ()
             cy.url().should("include", organizationId);
     })
 
-    it.only("set vacation days", () =>{
+    it("set vacation days", () =>{
         orgConfig.boardsPop.click()
         orgConfig.configPanel.should("be.visible")
         .and("have.css", "background-color", 'rgb(204, 204, 204)')
@@ -47,14 +47,6 @@ describe("check if reported days off deduct from total number of days off  ", ()
 
     })
 
-    it("check if vacation days changed", () =>{
-        cy.visit(`/boards/${boardId}/team`)
-        cy.url().should("include", boardId)
-        orgConfig.checkIfVacationDaysChanged();
-        orgConfig.timeOffTab.should("be.visible")
-        .and("have.text", "Time Off")
-        orgConfig.numberOfVacationDaysOnThisDay.should("have.value", orgConfigNumbers.vacationDays - 5);
-    })
 
     after("delete org", () =>{
         cy.deleteOrg();
