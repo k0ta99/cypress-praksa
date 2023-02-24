@@ -71,6 +71,7 @@ Cypress.Commands.add("loginViaBackend", () =>{
       },
     }).its("body").then(response => {
       organizationId = response.id;
+      cy.writeFile('cypress/fixtures/ids.json', {organizationId: response.id});
     })
   })
 
@@ -88,6 +89,7 @@ Cypress.Commands.add("loginViaBackend", () =>{
       },
     }).its("body").then(response =>{
       boardId = response.id;
+      cy.writeFile('cypress/fixtures/ids.json', {boardId: response.id});
     })
   })
 

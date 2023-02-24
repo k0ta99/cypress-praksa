@@ -35,6 +35,10 @@ class OrgConfig{
         return cy.get(".el-tabs__nav-scroll").find(".el-tabs__item").eq(2)
     }
 
+    get numberOfVacationDaysOnThisDay(){
+        return cy.get(".vs-c-free-days").find("input[type='number']")
+    }
+
     changeVacationDaysPerYear(daysNumber){
         this.configPanel.click();
         this.vacationDaysPerYear.clear();
@@ -43,9 +47,9 @@ class OrgConfig{
     }
 
     checkIfVacationDaysChanged(){
-        this.teamMembers.click();
-        this.enterTeamMember.click();
+        cy.get(".vs-c-team-member__avatar").first().click() 
         this.timeOffTab.click();
+        
 
     }
 }
