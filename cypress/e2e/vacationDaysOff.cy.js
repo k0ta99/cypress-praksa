@@ -37,6 +37,9 @@ describe("check if reported days off deduct from total number of days off ", () 
         orgConfig.configPanel.should("be.visible")
         .and("have.css", "background-color", 'rgb(204, 204, 204)')
         orgConfig.setVacationDays();
+        let deductedVacationDays = 16 - orgConfig.vacationDaysAdded;
+        orgConfig.totalNumberOfUnusedDays.should("contain",  12 + 'd');
+        
 
     })
 

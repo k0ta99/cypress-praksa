@@ -35,10 +35,6 @@ class OrgConfig{
         return cy.get(".el-tabs__nav-scroll").find(".el-tabs__item").eq(5)
     }
 
-    get numberOfVacationDaysOnThisDay(){
-        return cy.get(".vs-c-free-days").find("input[type='number']")
-    }
-
     get teamManagement(){
         return cy.get(".vs-l-project__menu").find(".vs-c-site-logo").eq(5)
     }
@@ -116,9 +112,24 @@ class OrgConfig{
         .find("td[class='next-month']").eq(2).should("contain", 3)
     }
 
+    get vacationDaysAdded(){
+        return cy.get("div[class='vs-c-timeline vs-c-section']")
+        .should('be.hidden').invoke('show')
+        .find("div[class='vs-c-timeline__activity']").eq(1)
+        .find("div[class='vs-c-media__body']")
+        .find("span[class='vs-c-time-off__time-text_span']").invoke('text')
+        .then(parseInt).should('be.eq', 4)
+    }
+
+    get numberOfVacationDaysOnThisDay(){
+        return cy.get("div[class='vs-c-free-days-form-group']").eq(1)
+        .find("input[placeholder='Member’s Vacation Days']")
+    }
+
     get totalNumberOfUnusedDays(){
         return cy.get("div[class='c-vacation-days']")
         find("span[class='c-vacation-days__value']")
+        .invoke('text').then(parseInt)
     }
 
 
@@ -149,7 +160,8 @@ class OrgConfig{
         this.startDate.click()
         this.endDate.click()
         this.addButton.click()
-        this.totalNumberOfUnusedDays.should("contain", '12d')
+        this.vacationDaysAdded
+        this.totalNumberOfUnusedDays
     }
 }
 
