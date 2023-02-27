@@ -5,7 +5,7 @@ import { faker } from "@faker-js/faker";
 import {flatpickr} from "flatpickr";
 
 
-describe("check if reported days off deduct from total number of days off ", () =>{
+describe("check if updated/deleted vacation days off deduct correctly", () =>{
    
     let organizationId;
     let boardId;
@@ -30,13 +30,20 @@ describe("check if reported days off deduct from total number of days off ", () 
             cy.loginViaBackend();
             cy.visit(`/organizations/${organizationId}/boards`);
             cy.url().should("include", organizationId);
-            orgConfig.boardsPop.click()
     })
 
     it("set vacation days", () =>{
+        orgConfig.boardsPop.click()
         orgConfig.configPanel.should("be.visible")
         .and("have.css", "background-color", 'rgb(204, 204, 204)')
+
         orgConfig.setVacationDays();
+        orgConfig.memberModal.should("be.visible")
+        .and("have.css", "background-color", 'rgb(255, 255, 255)')
+        cy.get('.is-left > .el-date-table > tbody > :nth-child(5) > :nth-child(7)').click()
+        cy.get('.is-left > .el-date-table > tbody > :nth-child(6) > :nth-child(3)').click()
+        orgConfig.addButton.click()
+        orgConfig.vacationDays.should("have.value", 14)
 
     })
 

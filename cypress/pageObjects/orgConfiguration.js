@@ -44,11 +44,20 @@ class OrgConfig{
     }
 
     get addEvent(){
-        return cy.get('[style=""] > :nth-child(1) > .vs-c-timeline > .vs-c-timeline__add-activity > .vs-c-timeline__activity > .vs-c-media')
+        return cy.get('.vs-c-timeline__add-activity').find(".vs-c-media")
+        .should("contain", "Add Event")
     }
 
-    get calender(){
-        return cy.get(':nth-child(1) > .el-date-editor > .el-input__icon')
+
+    get addEventHiddenToShow(){
+        return cy.get(".el-tabs__content").eq(1)
+        .find('.vs-c-timeline__add-activity').should('be.hidden').invoke('show')
+       
+    }
+
+    get addEventPlus(){
+        return cy.get(".vs-c-timeline__add-activity")
+        .find(".vs-c-timeline__icon").eq(1)
     }
 
     get startDate(){
@@ -59,12 +68,10 @@ class OrgConfig{
         return cy.get(".vs-u-gap--bottom").find(".vs-u-color--primary vs-u-gap--bottom-xs vs-u-text--uppercase")
     }
 
-    get contactEmail(){
-        return cy.get(".vs-c-form-group__body").find("input[type='email']")
-    }
-
     get addButton(){
-        return cy.get('.vs-u-display--flex > :nth-child(2) > :nth-child(2)')
+        return cy.get("div[class='vs-c-timeline vs-c-section']")
+        .find("div[class='vs-c-timeline__activity-edit']").eq(1)
+        .find("button").eq(1)
     }
 
     get vacationDays(){
@@ -72,8 +79,48 @@ class OrgConfig{
     }
 
     get memberModal(){
-        return cy.get(".vs-c-modal__body")
+        return cy.get(".vs-c-modal__body").should("be.visible")
+        .and("have.css", "background-color", 'rgb(255, 255, 255)')
     }
+
+    get totalWorkingHoursLabel(){
+        return cy.get(".vs-c-form-group__body").eq(2).find(".vs-c-form-group__label")
+        .eq(2).should("contain", "Total working hours per week")
+    }
+
+    get calender(){
+        return cy.get('.vs-c-timeline__activity')
+        .find(".vs-c-timeline__activity-edit").eq(1)
+        .find("div[class='el-date-editor vs-c-mt-input vs-u-border--none el-input el-date-editor--daterange']")
+        .find("i[class='el-input__icon el-icon-date']")
+    }
+
+    get showCalender(){
+        return cy.get("div[class='el-picker-panel__body']").should('be.hidden').invoke('show')
+    }
+
+    get startDate(){
+        return cy.get("div[class='el-picker-panel__content el-date-range-picker__content is-left']")
+        .should('be.hidden').invoke('show')
+        .find("table[class='el-date-table']")
+        .should('be.hidden').invoke('show')
+        .find("tr[class='el-date-table__row']").eq(4)
+        .should('be.hidden').invoke('show')
+        .find("td[class='available']").eq(1).should("contain", 28)
+    }
+
+    get endDate(){
+        return cy.get("div[class='el-picker-panel__content el-date-range-picker__content is-left']")
+        .find("table[class='el-date-table']")
+        .find("tr[class='el-date-table__row']").eq(4)
+        .find("td[class='next-month']").eq(2).should("contain", 3)
+    }
+
+    get totalNumberOfUnusedDays(){
+        return cy.get("div[class='c-vacation-days']")
+        find("span[class='c-vacation-days__value']")
+    }
+
 
     changeVacationDaysPerYear(daysNumber){
         this.configPanel.click();
@@ -91,11 +138,18 @@ class OrgConfig{
         this.teamManagement.click()
         this.boardsPop.click()
         this.enterTeamMember.click();
+        this.memberModal
         this.timeOffTab.click();
-        this.addEvent.click({force: true});
+        this.totalWorkingHoursLabel
+        this.addEvent
+        this.addEventHiddenToShow
+        this.addEventPlus.click()
         this.calender.click();
-       
-
+        this.showCalender
+        this.startDate.click()
+        this.endDate.click()
+        this.addButton.click()
+        this.totalNumberOfUnusedDays.should("contain", '12d')
     }
 }
 

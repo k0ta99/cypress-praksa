@@ -105,13 +105,3 @@ Cypress.Commands.add("loginViaBackend", () =>{
       },
     })
   })
-
-  
-
-  // function getEntityId(){
-  //   const url = window.location.href
-  //   let linkSplit = url.split("/")
-  //   let linkId = linkSplit[linkSplit.length - 2]
-
-  //   return linkId;
-  // }
