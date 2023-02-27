@@ -79,7 +79,7 @@ class OrgConfig{
         .and("have.css", "background-color", 'rgb(255, 255, 255)')
     }
 
-    get totalWorkingHoursLabel(){
+    get totalWorkingHoursInput(){
         return cy.get(".vs-c-form-group__body").eq(2).find(".vs-c-form-group__label")
         .eq(2).should("contain", "Total working hours per week")
     }
@@ -112,6 +112,23 @@ class OrgConfig{
         .find("td[class='next-month']").eq(2).should("contain", 3)
     }
 
+    get startDate2(){
+        return cy.get("div[class='el-picker-panel__content el-date-range-picker__content is-left']")
+        .should('be.hidden').invoke('show')
+        .find("table[class='el-date-table']")
+        .should('be.hidden').invoke('show')
+        .find("tr[class='el-date-table__row']").eq(4)
+        .should('be.hidden').invoke('show')
+        .find("td[class='available in-range start-date']").should("contain", 28)
+    }
+
+    get endDate2(){
+        return cy.get("div[class='el-picker-panel__content el-date-range-picker__content is-left']")
+        .find("table[class='el-date-table']")
+        .find("tr[class='el-date-table__row']").eq(5)
+        .find("td[class='next-month']").eq(1).should("contain", 6)
+    }
+
     get vacationDaysAdded(){
         return cy.get("div[class='vs-c-timeline vs-c-section']")
         .should('be.hidden').invoke('show')
@@ -119,6 +136,15 @@ class OrgConfig{
         .find("div[class='vs-c-media__body']")
         .find("span[class='vs-c-time-off__time-text_span']").invoke('text')
         .then(parseInt).should('be.eq', 4)
+    }
+
+    get updatedVacationDaysAdded(){
+        return cy.get("div[class='vs-c-timeline vs-c-section']")
+        .should('be.hidden').invoke('show')
+        .find("div[class='vs-c-timeline__activity']").eq(1)
+        .find("div[class='vs-c-media__body']")
+        .find("span[class='vs-c-time-off__time-text_span']").invoke('text')
+        .then(parseInt).should('be.eq', 5)
     }
 
     get numberOfVacationDaysOnThisDay(){
@@ -132,6 +158,36 @@ class OrgConfig{
         .invoke('text').then(parseInt)
     }
 
+    get editVacationDays(){
+        return cy.get("div[class='vs-c-media']").should('be.hidden').invoke('show').eq(2)
+        .find("div[class='vs-c-media__body']")
+        .find("div[class='vs-c--action-button']").should('be.hidden').invoke('show')
+        .find("button").eq(0)
+    }
+
+    get deleteVacationDaysButton(){
+        return cy.get("div[class='vs-c-media']").should('be.hidden').invoke('show').eq(2)
+        .find("div[class='vs-c-media__body']")
+        .find("div[class='vs-c--action-button']").should('be.hidden').invoke('show')
+        .find("button").eq(1)
+    }
+
+    get deleteConfirmation(){
+        return cy.get("div[class='vs-c-modal vs-c-confirmation-modal']")
+        .find("div[class='vs-c-modal__footer']")
+        .find("button").eq(1)
+    }
+
+    get statisticsLine(){
+        return cy.get("div[class='vs-c-timeoff-chart']")
+        .find("div[class='vs-u-display--flex vs-u-gap--bottom vs-u-gap--top']")
+        .find("div[class='vs-c-timeoff-chart--segment el-tooltip']")
+    }
+
+    get vacationDaysUpdateButton(){
+        return cy.get("div[class='vs-c-timeline__activity-edit']")
+        .find("button").eq(1)
+    }
 
     changeVacationDaysPerYear(daysNumber){
         this.configPanel.click();
@@ -151,7 +207,7 @@ class OrgConfig{
         this.enterTeamMember.click();
         this.memberModal
         this.timeOffTab.click();
-        this.totalWorkingHoursLabel
+        this.totalWorkingHoursInput
         this.addEvent
         this.addEventHiddenToShow
         this.addEventPlus.click()
@@ -162,6 +218,31 @@ class OrgConfig{
         this.addButton.click()
         this.vacationDaysAdded
         this.totalNumberOfUnusedDays
+    }
+
+    updateVacationDays(){
+        this.boardsPop.click()
+        this.enterTeamMember.click()
+        this.memberModal
+        this.timeOffTab.click()
+        this.totalWorkingHoursInput
+        this.editVacationDays.trigger("mouseover").click()
+        this.calender.click();
+        this.showCalender
+        this.startDate2.click()
+        this.endDate2.click()
+        this.vacationDaysUpdateButton.click()
+        this.updatedVacationDaysAdded
+    }
+
+    deleteVacationDays(){
+        this.boardsPop.click()
+        this.enterTeamMember.click()
+        this.memberModal
+        this.timeOffTab.click()
+        this.totalWorkingHoursInput
+        this.deleteVacationDaysButton.trigger("mouseover").click()
+        this.deleteConfirmation.click()
     }
 }
 

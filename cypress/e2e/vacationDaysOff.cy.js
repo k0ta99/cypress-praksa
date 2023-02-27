@@ -39,8 +39,6 @@ describe("check if reported days off deduct from total number of days off ", () 
         orgConfig.setVacationDays();
         let deductedVacationDays = 16 - orgConfig.vacationDaysAdded;
         orgConfig.totalNumberOfUnusedDays.should("contain",  12 + 'd');
-        
-
     })
 
 

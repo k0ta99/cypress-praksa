@@ -32,21 +32,33 @@ describe("check if updated/deleted vacation days off deduct correctly", () =>{
             cy.url().should("include", organizationId);
     })
 
-    it("set vacation days", () =>{
+    it("add vacation days", () =>{
         orgConfig.boardsPop.click()
         orgConfig.configPanel.should("be.visible")
         .and("have.css", "background-color", 'rgb(204, 204, 204)')
-
         orgConfig.setVacationDays();
-        orgConfig.memberModal.should("be.visible")
-        .and("have.css", "background-color", 'rgb(255, 255, 255)')
-        cy.get('.is-left > .el-date-table > tbody > :nth-child(5) > :nth-child(7)').click()
-        cy.get('.is-left > .el-date-table > tbody > :nth-child(6) > :nth-child(3)').click()
-        orgConfig.addButton.click()
-        orgConfig.vacationDays.should("have.value", 14)
-
+        orgConfig.statisticsLine.should("be.visible")
+        .and("have.css", "background-color", 'rgb(168, 206, 72)')
     })
 
+    it("update vacation days", () =>{
+        orgConfig.boardsPop.click()
+        orgConfig.configPanel.should("be.visible")
+        .and("have.css", "background-color", 'rgb(204, 204, 204)')
+        cy.visit(`/organizations/${organizationId}/team`)
+        orgConfig.updateVacationDays();
+        let updatedVacationDays = 16 - orgConfig.updatedVacationDaysAdded;
+        orgConfig.totalNumberOfUnusedDays.should("contain", 11 + 'd');
+    })
+
+    it("delete vacation days", () =>{
+        orgConfig.boardsPop.click()
+        orgConfig.configPanel.should("be.visible")
+        .and("have.css", "background-color", 'rgb(204, 204, 204)')
+        cy.visit(`/organizations/${organizationId}/team`)
+        orgConfig.deleteVacationDays();
+        orgConfig.totalNumberOfUnusedDays.should("contain", 16 + 'd');
+    })
 
     after("delete org", () =>{
         cy.deleteOrg();
