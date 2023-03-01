@@ -1,19 +1,14 @@
+
 class OrgConfig{
-    
+    intSum = 0;
+    intSum2 = 0;
+
     get configPanel(){
         return cy.get(".vs-l-project__menu").last()
     }
 
     get vacationDaysPerYear(){
         return cy.get(".el-form-item__content").eq(1).find("input[type='text']");
-    }
-
-    get numberOfWorkingMonths(){
-        return cy.get(".el-form").find("input[type='text']").eq(1);
-    }
-
-    get numberOfAdditionalDaysGranted(){
-        return cy.get(".el-form").find("input[type='text']").eq(2);
     }
 
     get updateButton(){
@@ -44,7 +39,6 @@ class OrgConfig{
         .should("contain", "Add Event")
     }
 
-
     get addEventHiddenToShow(){
         return cy.get(".el-tabs__content").eq(1)
         .find('.vs-c-timeline__add-activity').should('be.hidden').invoke('show')
@@ -54,10 +48,6 @@ class OrgConfig{
     get addEventPlus(){
         return cy.get(".vs-c-timeline__add-activity")
         .find(".vs-c-timeline__icon").eq(1)
-    }
-
-    get startDate(){
-        return cy.get(".available in-range start-date");
     }
 
     get vacationDaysHeader(){
@@ -79,7 +69,7 @@ class OrgConfig{
         .and("have.css", "background-color", 'rgb(255, 255, 255)')
     }
 
-    get totalWorkingHoursInput(){
+    get totalWorkingHoursLabel(){
         return cy.get(".vs-c-form-group__body").eq(2).find(".vs-c-form-group__label")
         .eq(2).should("contain", "Total working hours per week")
     }
@@ -112,21 +102,72 @@ class OrgConfig{
         .find("td[class='next-month']").eq(2).should("contain", 3)
     }
 
-    get startDate2(){
+    get startDateParental(){
+        return cy.get("div[class='el-picker-panel__content el-date-range-picker__content is-left']")
+        .should('be.hidden').invoke('show')
+        .find("table[class='el-date-table']")
+        .should('be.hidden').invoke('show')
+        .find("tr[class='el-date-table__row']").eq(1)
+        .should('be.hidden').invoke('show')
+        .find("td[class='available']").eq(6).should("contain", 11)
+    }
+
+    get endDateParental(){
+        return cy.get("div[class='el-picker-panel__content el-date-range-picker__content is-left']")
+        .find("table[class='el-date-table']")
+        .find("tr[class='el-date-table__row']").eq(3)
+        .find("td[class='available']").eq(5).should("contain", 24)
+    }
+
+    get startDateUpdated(){
         return cy.get("div[class='el-picker-panel__content el-date-range-picker__content is-left']")
         .should('be.hidden').invoke('show')
         .find("table[class='el-date-table']")
         .should('be.hidden').invoke('show')
         .find("tr[class='el-date-table__row']").eq(4)
         .should('be.hidden').invoke('show')
-        .find("td[class='available in-range start-date']").should("contain", 28)
+        .find("td[class='available']").should("contain", 28)
     }
 
-    get endDate2(){
+    get endDateUpdated(){
         return cy.get("div[class='el-picker-panel__content el-date-range-picker__content is-left']")
         .find("table[class='el-date-table']")
         .find("tr[class='el-date-table__row']").eq(5)
         .find("td[class='next-month']").eq(1).should("contain", 6)
+    }
+
+    get startDateSick(){
+        return cy.get("div[class='el-picker-panel__content el-date-range-picker__content is-left']")
+        // .should('be.hidden').invoke('show')
+        .find("table[class='el-date-table']")
+        .should('be.hidden').invoke('show')
+        .find("tr[class='el-date-table__row']").eq(1)
+        .should('be.hidden').invoke('show')
+        .find("td[class='available']").eq(0).should("contain", 5)
+    }
+
+    get endDateSick(){
+        return cy.get("div[class='el-picker-panel__content el-date-range-picker__content is-left']")
+        .find("table[class='el-date-table']")
+        .find("tr[class='el-date-table__row']").eq(1)
+        .find("td[class='available']").eq(5).should("contain", 10)
+    }
+
+    get startDatePaid(){
+        return cy.get("div[class='el-picker-panel__content el-date-range-picker__content is-left']")
+        .should('be.hidden').invoke('show')
+        .find("table[class='el-date-table']")
+        .should('be.hidden').invoke('show')
+        .find("tr[class='el-date-table__row']").eq(3)
+        .should('be.hidden').invoke('show')
+        .find("td[class='available']").eq(6).should("contain", 25)
+    }
+
+    get endDatePaid(){
+        return cy.get("div[class='el-picker-panel__content el-date-range-picker__content is-left']")
+        .find("table[class='el-date-table']")
+        .find("tr[class='el-date-table__row']").eq(4)
+        .find("td[class='available']").eq(1).should("contain", 27)
     }
 
     get vacationDaysAdded(){
@@ -145,6 +186,44 @@ class OrgConfig{
         .find("div[class='vs-c-media__body']")
         .find("span[class='vs-c-time-off__time-text_span']").invoke('text')
         .then(parseInt).should('be.eq', 5)
+    }
+
+    
+    parentalLeaveDaysAdded(){
+        return cy.get("div[class='vs-c-timeline vs-c-section']")
+        .should('be.hidden').invoke('show')
+        .find("div[class='vs-c-timeline__activity']").eq(1).should("contain", 'Parental leave')
+        .find("div[class='vs-c-media__body']")
+        .find("span[class='vs-c-time-off__time-text_span']").invoke("text").then(txt =>{
+            this.intSum += parseInt(txt)
+        })
+    }
+
+    sickLeaveDaysAdded(){
+        return cy.get("div[class='vs-c-timeline vs-c-section']")
+        .should('be.hidden').invoke('show')
+        .find("div[class='vs-c-timeline__activity']").eq(2).should("contain", 'Sick leave')
+        .find("div[class='vs-c-media__body']")
+        .find("span[class='vs-c-time-off__time-text_span']").invoke("text").then(txt =>{
+            this.intSum += parseInt(txt)
+            window.localStorage.setItem('parentalSickSum', this.intSum);
+            expect(window.localStorage.getItem('parentalSickSum')).to.equal('15');
+            console.log("INT SUM", this.intSum)
+        })
+    }
+
+    paidLeaveDaysAdded(){
+        return cy.get("div[class='vs-c-timeline vs-c-section']")
+        .should('be.hidden').invoke('show')
+        .find("div[class='vs-c-timeline__activity']").eq(1).should("contain", 'Paid time off')
+        .find("div[class='vs-c-media']")
+        .find("div[class='vs-c-media__body']")
+        .find("span[class='vs-c-time-off__time-text_span']").invoke("text").then(txt =>{
+            this.intSum2 = this.intSum + parseInt(txt)
+            window.localStorage.setItem('parentalSickPaidSum', this.intSum2);
+            expect(window.localStorage.getItem('parentalSickPaidSum')).to.equal('16')
+            console.log("INT SUM 2", this.intSum2)
+        })
     }
 
     get numberOfVacationDaysOnThisDay(){
@@ -184,9 +263,63 @@ class OrgConfig{
         .find("div[class='vs-c-timeoff-chart--segment el-tooltip']")
     }
 
+    get statisticsLineParental(){
+        return cy.get("div[class='vs-c-timeoff-chart']")
+        .find("div[class='vs-u-display--flex vs-u-gap--bottom vs-u-gap--top']")
+        .find("div[class='vs-c-timeoff-chart--segment el-tooltip']").eq(1)
+    }
+    get statisticsLineSick(){
+        return cy.get("div[class='vs-c-timeoff-chart']")
+        .find("div[class='vs-u-display--flex vs-u-gap--bottom vs-u-gap--top']")
+        .find("div[class='vs-c-timeoff-chart--segment el-tooltip']").eq(2)
+    }
+
+    get statisticsLinePaid(){
+        return cy.get("div[class='vs-c-timeoff-chart']")
+        .find("div[class='vs-u-display--flex vs-u-gap--bottom vs-u-gap--top']")
+        .find("div[class='vs-c-timeoff-chart--segment el-tooltip']").eq(3)
+    }
+
+    get statisticsLineTotalDays(){
+        return cy.get("div[class='vs-c-timeoff-chart']")
+        .find("div[class='vs-u-display--flex vs-u-gap--bottom vs-u-gap--top']")
+        .find("small[class='vs-u-gap--left-xs vs-u-color--gray']")
+    }
+
     get vacationDaysUpdateButton(){
         return cy.get("div[class='vs-c-timeline__activity-edit']")
         .find("button").eq(1)
+    }
+
+    get variousEventsDropdown(){
+        return cy.get("li[class='vs-c-timeline__add-activity']")
+        .should("be.hidden").invoke('show')
+        .find("a[class='vs-c-btn vs-c-btn--link']")
+    }
+
+    get parentalLeave(){
+        return cy.get("ul[class='el-dropdown-menu vs-c-dropdown-plus-icon']")
+        .find("li[class='el-dropdown-menu__item']").eq(1).should("contain", 'Parental leave');
+    }
+
+    get sickLeave(){
+        return cy.get("ul[class='el-dropdown-menu vs-c-dropdown-plus-icon']")
+        .find("li[class='el-dropdown-menu__item']").eq(2).should("contain", 'Sick leave');
+    }
+
+    get paidTimeOff(){
+        return cy.get("ul[class='el-dropdown-menu vs-c-dropdown-plus-icon']")
+        .find("li[class='el-dropdown-menu__item']").eq(3).should("contain", 'Paid time off');
+    }
+
+    get unpaidTimeOff(){
+        return cy.get("ul[class='el-dropdown-menu vs-c-dropdown-plus-icon']")
+        .find("li[class='el-dropdown-menu__item']").eq(4).should("contain", 'Unpaid time off');
+    }
+
+    get other(){
+        return cy.get("ul[class='el-dropdown-menu vs-c-dropdown-plus-icon']")
+        .find("li[class='el-dropdown-menu__item']").eq(5).should("contain", 'Other');
     }
 
     changeVacationDaysPerYear(daysNumber){
@@ -207,7 +340,7 @@ class OrgConfig{
         this.enterTeamMember.click();
         this.memberModal
         this.timeOffTab.click();
-        this.totalWorkingHoursInput
+        this.totalWorkingHoursLabel
         this.addEvent
         this.addEventHiddenToShow
         this.addEventPlus.click()
@@ -225,12 +358,12 @@ class OrgConfig{
         this.enterTeamMember.click()
         this.memberModal
         this.timeOffTab.click()
-        this.totalWorkingHoursInput
+        this.totalWorkingHoursLabel
         this.editVacationDays.trigger("mouseover").click()
         this.calender.click();
         this.showCalender
-        this.startDate2.click()
-        this.endDate2.click()
+        this.startDateUpdated.click()
+        this.endDateUpdated.click()
         this.vacationDaysUpdateButton.click()
         this.updatedVacationDaysAdded
     }
@@ -240,10 +373,66 @@ class OrgConfig{
         this.enterTeamMember.click()
         this.memberModal
         this.timeOffTab.click()
-        this.totalWorkingHoursInput
+        this.totalWorkingHoursLabel
         this.deleteVacationDaysButton.trigger("mouseover").click()
         this.deleteConfirmation.click()
     }
+
+    addEvents(){
+        this.teamManagement.click()
+        this.boardsPop.click()
+        this.enterTeamMember.click()
+        this.memberModal
+        this.timeOffTab.click()
+        this.totalWorkingHoursLabel
+        this.addEvent
+        this.addEventHiddenToShow
+        this.addEventPlus.click()
+        this.variousEventsDropdown.trigger("mouseover").click()
+    }
+
+    parentalLeaveSickLeave(){
+        this.parentalLeave.click()
+        this.calender.click();
+        this.showCalender
+        this.startDateParental.click()
+        this.endDateParental.click()
+        this.addButton.click()
+        this.addEvent
+        this.addEventHiddenToShow
+        this.addEventPlus.click()
+        this.variousEventsDropdown.trigger("mouseover").click()
+        this.sickLeave.click()
+        this.calender.click();
+        this.showCalender
+        this.startDateSick.click()
+        this.endDateSick.click()
+        this.addButton.click()
+        this.parentalLeaveDaysAdded()
+        this.sickLeaveDaysAdded()
+        cy.reload()
+        this.enterTeamMember.click()
+        this.timeOffTab.click().then(() => {
+            this.statisticsLineTotalDays.should("contain", window.localStorage.getItem('parentalSickSum'))
+        })
+    }
+
+    parentalSickPaidLeave(){
+        this.paidTimeOff.click()
+        this.calender.click();
+        this.showCalender
+        this.startDatePaid.click()
+        this.endDatePaid.click()
+        this.addButton.click()
+        this.paidLeaveDaysAdded()
+        cy.reload()
+        this.enterTeamMember.click()
+        this.timeOffTab.click().then(() =>{
+            this.statisticsLineTotalDays.should("contain", window.localStorage.getItem('parentalSickPaidSum'))
+        })
+    }
+
+
 }
 
 export const orgConfig = new OrgConfig()
